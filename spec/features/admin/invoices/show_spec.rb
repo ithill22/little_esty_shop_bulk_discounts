@@ -17,6 +17,10 @@ describe 'Admin Invoices Index Page' do
     @ii_2 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_2.id, quantity: 6, unit_price: 1, status: 1)
     @ii_3 = InvoiceItem.create!(invoice_id: @i2.id, item_id: @item_2.id, quantity: 87, unit_price: 12, status: 2)
 
+    @discount1 = @m1.bulk_discounts.create!(percentage_discount: 0.2, quantity_threshold: 10, promo_name: 'Buy 10, Get 20% Off')
+    @discount2 = @m1.bulk_discounts.create!(percentage_discount: 0.3, quantity_threshold: 15, promo_name: 'Rewards Program')
+    
+
     visit admin_invoice_path(@i1)
   end
 
@@ -57,6 +61,12 @@ describe 'Admin Invoices Index Page' do
     expect(page).to have_content("Total Revenue: $#{@i1.total_revenue}")
 
     expect(page).to_not have_content(@i2.total_revenue)
+  end
+
+  it 'should display the total revenue after discounts' do
+
+    expect(page).to have_content("Total Discount: $4.8")
+    expect(page).to have_content("Total Revenue After Discounts: $25.2")
   end
 
   it 'should have status as a select field that updates the invoices status' do
