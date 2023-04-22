@@ -28,7 +28,7 @@ class Invoice < ApplicationRecord
         discounted_total += discounted_amount
       end
     end
-    discounted_total
+    discounted_total.round(2)
   end
 
   def grand_total
