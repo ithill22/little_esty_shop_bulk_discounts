@@ -50,5 +50,20 @@ RSpec.describe 'Merchant Bulk Discount Index Page' do
       expect(page).to_not have_content(@discount2.promo_name)
       expect(page).to have_content(@discount1.promo_name)
     end
+
+    it 'I see a section with the 3 next upcoming holidays' do
+      @holidays = HolidaySearch.new.holidays
+      within "#upcoming-holidays" do
+        @holidays.each_with_index do |holiday, index|
+          if index < 3
+            expect(page).to have_content(holiday.name)
+            expect(page).to have_content(holiday.format_date)
+          else
+            expect(page).to_not have_content(holiday.name)
+            expect(page).to_not have_content(holiday.format_date)
+          end
+        end
+      end
+    end
   end
 end
