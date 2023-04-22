@@ -39,4 +39,18 @@ RSpec.describe InvoiceItem, type: :model do
       expect(InvoiceItem.incomplete_invoices).to eq([@i1, @i3])
     end
   end
+
+  describe "instance methods" do
+    before :each do
+      test_data
+      @discount1 = @merchant1.bulk_discounts.create!(percentage_discount: 0.2, quantity_threshold: 5, promo_name: 'Buy 5, Get 20% Off')
+      @discount2 = @merchant1.bulk_discounts.create!(percentage_discount: 0.05, quantity_threshold: 3, promo_name: 'Rewards Program')
+      @discount3 = @merchant2.bulk_discounts.create!(percentage_discount: 0.42, quantity_threshold: 20, promo_name: 'National Haircut Day')
+    end
+    it 'discount_applied' do
+      expect(@ii_1.discount_applied).to eq(@discount1)
+      expect(@ii_4.discount_applied).to eq(@discount2)
+      expect(@ii_3.discount_applied).to eq(nil)
+    end
+  end
 end

@@ -113,4 +113,18 @@ RSpec.describe 'invoices show' do
      end
   end
 
+  it "should display a link to the bulk discount show page if adiscount is applied" do
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+    within "#the-status-#{@ii_1.id}" do
+      expect(page).to have_content("None")
+    end
+    within "#the-status-#{@ii_11.id}" do
+      expect(page).to have_link(@discount1.promo_name)
+    end
+
+    click_link @discount1.promo_name
+
+    expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @discount1))
+  end
+
 end
