@@ -8,4 +8,4 @@ class NagerService
     response = HTTParty.get(url)
     JSON.parse(response.body, symbolize_names: true)[0..2]
   end
-endg
+end
